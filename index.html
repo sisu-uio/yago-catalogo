@@ -5,17 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yagó! - Catálogo</title>
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f4f4f4; }
-        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
-        h1 { color: #333; }
-        .status { color: green; font-weight: bold; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: auto; }
+        .card { background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); }
+        .precio { color: #2ecc71; font-weight: bold; font-size: 1.2rem; }
+        .btn-ws { background: #25d366; color: white; text-decoration: none; padding: 10px 20px; border-radius: 5px; display: inline-block; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Yagó!</h1>
-        <p class="status">● Sistema Base Conectado</p>
-        <p>Sisu, el catálogo dinámico está en camino.</p>
-    </div>
+    <h1 style="text-align:center;">Catálogo Yagó!</h1>
+    <div id="productos" class="grid">Cargando productos...</div>
+
+    <script>
+        const url = 'https://script.google.com/macros/s/AKfycbwV2SN9mKVCuzRC00sf09dpPSgNW2BVyYsm-_9IC1-hLAlWilwlOIroIIRJnu5i4GfTyw/exec';
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                const contenedor = document.getElementById('productos');
+                contenedor.innerHTML = '';
+                data.forEach(p => {
+                    contenedor.innerHTML += `
+                        <div class="card">
+                            <h3>${p.Nombre}</h3>
+                            <p>${p.Descripción}</p>
+                            <p class="precio">$${p.Precio}</p>
+                            <a href="${p.WhatsApp_Link}" class="btn-ws">Pedir por WhatsApp</a>
+                        </div>
+                    `;
+                });
+            })
+            .catch(err => {
+                document.getElementById('productos').innerHTML = 'Error al cargar los productos.';
+                console.error(err);
+            });
+    </script>
 </body>
 </html>
